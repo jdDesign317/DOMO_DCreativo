@@ -1,0 +1,26 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    color: #dc3545; /* rojo Bootstrap */
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.btn-add {
+    background-color: #dc3545;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 10px 20px;       /* rectángulo */
+    border-radius: 12px;      /* bordes redondeados */
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-add:hover {
+    background-color: #bb2d3b;
+    color: #fff;
+}

@@ -1,0 +1,53 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 40px 30px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+}
+
+.welcome-card h1 {
+    color: #dc3545; /* rojo Bootstrap */
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.welcome-card p {
+    color: #6c757d; /* gris Bootstrap */
+    margin-bottom: 30px;
+}
+
+.btn-login {
+    background-color: #dc3545; /* rojo */
+    color: #fff;
+    border: none;
+    transition: 0.3s;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn-login:hover {
+    background-color: #bb2d3b; /* rojo más oscuro */
+}
+
+.btn-register {
+    background-color: #6c757d; /* gris */
+    color: #fff;
+    border: none;
+    width: 100%;
+}
+
+.btn-register:hover {
+    background-color: #5a6268; /* gris más oscuro */
+}

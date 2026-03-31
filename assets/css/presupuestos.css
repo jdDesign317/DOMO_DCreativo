@@ -1,0 +1,51 @@
+body.light-theme {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Contenedor principal con espacio por la navbar fija */
+.page-container {
+    padding-top: 80px;
+}
+
+/* Tarjeta suave */
+.soft-card {
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+}
+
+/* Navbar translúcida */
+.glass-navbar {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+}
+
+/* Título principal en rojo */
+.section-title,
+.card-header span {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Botón nuevo presupuesto */
+.btn-outline-danger {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+}
+
+/* Tabla */
+.table thead th {
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* Footer */
+footer {
+    font-size: 0.85rem;
+    color: #6c757d;
+}

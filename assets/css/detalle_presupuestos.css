@@ -1,0 +1,23 @@
+body.bg-light {
+    font-family: 'Poppins', sans-serif;
+}
+
+.table-corporate thead {
+    background: #f2f2f2;
+}
+
+.table-corporate th, .table-corporate td {
+    vertical-align: middle;
+}
+
+.small-input {
+    width: 90px;
+}
+
+.product-select {
+    min-width: 220px;
+}
+
+.logo-hidden {
+    display: none;
+}
