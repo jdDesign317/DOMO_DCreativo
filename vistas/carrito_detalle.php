@@ -9,12 +9,17 @@ error_reporting(E_ALL);
 ini_set("display_errors", "On");
 
 require_once "../controladores/CarritoControlador.php";
-require_once "../controladores/CarritoDetalleControlador.php";
 require_once "../controladores/ProductosControlador.php";
 
-$carritoController        = new CarritoControlador();
-$carritoDetalleController = new CarritoDetalleControlador();
-$productosController      = new ProductosControlador();
+$carritoController   = new CarritoControlador();
+$productosController = new ProductosControlador();
+
+/*  PROCESAR ELIMINAR PRODUCTO */
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"])) {
+    if ($_POST["accion"] == "quitar") {
+        $carritoController->quitar($_POST["id_detalle"], $_POST["id_carrito"]);
+    }
+}
 
 if (!isset($_GET["id_carrito"]) || !is_numeric($_GET["id_carrito"])) {
     header("Location: carrito.php");
@@ -29,7 +34,7 @@ if (!$carrito) {
     exit;
 }
 
-$detalles  = $carritoDetalleController->listarPorCarrito($id_carrito);
+$detalles = $carritoController->getModelo()->listarDetalles($id_carrito);
 $productos = $productosController->listar();
 $totalGeneral = array_sum(array_map(fn($d) => $d["cantidad"] * $d["precio"], $detalles));
 ?>
@@ -59,18 +64,6 @@ $totalGeneral = array_sum(array_map(fn($d) => $d["cantidad"] * $d["precio"], $de
             <a href="carrito.php" class="btn btn-outline-secondary me-2">
                 <i class="bi bi-arrow-left"></i> Volver
             </a>
-            <button id="btnGuardar" class="btn btn-danger me-1">
-                <i class="bi bi-save"></i> Guardar
-            </button>
-            <button id="btnPDF" class="btn btn-outline-dark me-1">
-                <i class="bi bi-file-earmark-pdf"></i> PDF
-            </button>
-            <button id="btnWord" class="btn btn-outline-primary me-1">
-                <i class="bi bi-file-earmark-word"></i> Word
-            </button>
-            <button id="btnTicket" class="btn btn-outline-info">
-                <i class="bi bi-receipt"></i> Ticket
-            </button>
         </div>
     </div>
 
@@ -78,37 +71,46 @@ $totalGeneral = array_sum(array_map(fn($d) => $d["cantidad"] * $d["precio"], $de
     <div class="card mb-3">
         <div class="card-body">
             <strong>Total general:</strong>
-            <div id="totalEstimadoTexto" class="fs-5 text-danger">
+            <div class="fs-5 text-danger">
                 $<?= number_format($totalGeneral, 2) ?>
             </div>
         </div>
     </div>
 
-    <!-- Tabla editable -->
+    <!-- Tabla -->
     <div class="card shadow-sm">
         <div class="card-body">
             <div class="table-responsive">
-                <table id="tablaDetalles" class="table table-bordered table-corporate">
+                <table class="table table-bordered">
                     <thead class="table-light">
                         <tr>
                             <th>Producto</th>
                             <th>Cantidad</th>
-                            <th>Precio unitario ($)</th>
-                            <th>Subtotal ($)</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($detalles as $d): ?>
-                        <tr data-id="<?= $d['id_detalle'] ?>">
+                        <tr>
                             <td><?= htmlspecialchars($d['nombre']) ?></td>
-                            <td><input type="number" class="form-control cant small-input" min="1" value="<?= $d['cantidad'] ?>"></td>
+                            <td><?= $d['cantidad'] ?></td>
                             <td>$<?= number_format($d['precio'], 2) ?></td>
-                            <td class="subtotal">$<?= number_format($d['cantidad'] * $d['precio'], 2) ?></td>
+                            <td>$<?= number_format($d['cantidad'] * $d['precio'], 2) ?></td>
                             <td>
-                                <button class="btn btn-sm btn-outline-danger btn-eliminar">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+
+                                <!--  ELIMINAR CORREGIDO -->
+                                <form method="POST" action="" style="display:inline;">
+                                    <input type="hidden" name="accion" value="quitar">
+                                    <input type="hidden" name="id_detalle" value="<?= $d['id_detalle'] ?>">
+                                    <input type="hidden" name="id_carrito" value="<?= $id_carrito ?>">
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -116,40 +118,17 @@ $totalGeneral = array_sum(array_map(fn($d) => $d["cantidad"] * $d["precio"], $de
                 </table>
             </div>
 
-            <!-- Botones abajo -->
-            <div class="mt-3 d-flex justify-content-between align-items-center">
+            <div class="mt-3 d-flex justify-content-between">
+                <a href="productos.php" class="btn btn-sm btn-outline-primary">
+                    Ver productos
+                </a>
 
-                <div>
-                    <button id="btnAgregarFila" class="btn btn-sm btn-outline-success">
-                        <i class="bi bi-plus"></i> Agregar fila
-                    </button>
-
-                    <!-- NUEVO BOTÓN A PRODUCTOS (SOLICITADO) -->
-                    <a href="productos.php" class="btn btn-sm btn-outline-primary ms-2">
-                        <i class="bi bi-boxes"></i> Ver productos
-                    </a>
-                </div>
-
-                <div>
-                    <strong>Total general: $<span id="totalGeneral"><?= number_format($totalGeneral, 2) ?></span></strong>
-                </div>
+                <strong>Total: $<?= number_format($totalGeneral, 2) ?></strong>
             </div>
+
         </div>
     </div>
 </div>
 
-<img id="logoHidden" class="logo-hidden" src="../assets/img/logo.png" alt="logo">
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    window.ID_CARRITO = <?= json_encode($id_carrito) ?>;
-    window.CARRITO_USUARIO = <?= json_encode($carrito["id_usuario"] ?? "") ?>;
-    window.CARRITO_FECHA = <?= json_encode($carrito["fecha"] ?? "") ?>;
-</script>
-
-<script src="../assets/js/carrito_detalle.js"></script>
-<script src="../assets/js/carrito_detalle_guardar.js"></script>
-<script src="../assets/js/carrito_detalle_exportar.js"></script>
 </body>
 </html>

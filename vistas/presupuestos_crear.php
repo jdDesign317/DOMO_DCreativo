@@ -19,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $estado = $_POST["estado"];
 
     if ($presupuestosControlador->crear($id_usuario, $total_estimado, $estado)) {
-        $mensaje = "<div class='alert alert-success text-center'>✅ Presupuesto creado correctamente.</div>";
+        $mensaje = "<div class='alert alert-success text-center'> Presupuesto creado correctamente.</div>";
     } else {
-        $mensaje = "<div class='alert alert-danger text-center'>❌ Error al crear el presupuesto.</div>";
+        $mensaje = "<div class='alert alert-danger text-center'> Error al crear el presupuesto.</div>";
     }
 }
 ?>

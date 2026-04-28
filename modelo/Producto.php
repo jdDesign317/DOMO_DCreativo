@@ -1,15 +1,10 @@
 <?php
 class Producto {
-    private $conexion;
+    private mysqli $conexion;
 
-    public function __construct() {
-        $this->conexion = new mysqli("localhost", "root", "", "domo_creativo");
-        if ($this->conexion->connect_error) {
-            die("Error de conexión: " . $this->conexion->connect_error);
-        }
-        $this->conexion->set_charset("utf8mb4");
+    public function __construct(mysqli $conexion) {
+        $this->conexion = $conexion;
     }
-
     /* 
        LISTAR PRODUCTOS
      */

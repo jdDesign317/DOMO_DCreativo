@@ -10,7 +10,7 @@ $controlador = $_GET['controlador'] ?? null;
 $accion      = $_GET['accion'] ?? null;
 
 if ($controlador && $accion) {
-    // Convertir nombres con guiones bajos a CamelCase
+
     // Ejemplo: metodos_pago -> MetodosPagoControlador
     $clase   = str_replace('_', '', ucwords($controlador, '_')) . "Controlador";
     $archivo = __DIR__ . "/controladores/" . $clase . ".php";
@@ -22,19 +22,23 @@ if ($controlador && $accion) {
             $obj = new $clase();
 
             if (method_exists($obj, $accion)) {
+
                 // Manejo genérico de acciones con parámetros
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
                     // Pasar todos los datos del formulario como argumentos
                     $params = array_values($_POST);
                     $obj->$accion(...$params);
                 } elseif (!empty($_GET)) {
+
                     // Pasar parámetros de la URL
                     $params = array_values($_GET);
-                    // El primero suele ser controlador, el segundo acción → los descartamos
+          
                     array_shift($params); // controlador
                     array_shift($params); // accion
                     $obj->$accion(...$params);
                 } else {
+
                     // Acción sin parámetros
                     $obj->$accion();
                 }
@@ -75,7 +79,7 @@ if ($controlador && $accion) {
     <!-- Tarjeta de bienvenida -->
     <div class="welcome-card text-center mt-5">
         <h1><i class="bi bi-brush-fill"></i> Domo Creativo</h1>
-        <p>Bienvenido a la plataforma de gestión y presupuestos creativos.</p>
+        <p>Bienvenido al Sistema de Gestión Creativa y Producción Personalizada: DOMO Diseño Creativo</p>
 
         <!-- Botones -->
         <a href="vistas/login.php" class="btn btn-login">

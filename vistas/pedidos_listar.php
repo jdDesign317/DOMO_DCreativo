@@ -1,7 +1,8 @@
 <?php
 if (!defined("BASE_URL")) {
-    define("BASE_URL", "/plataforma_domo/");
+    define("BASE_URL", "/plataforma_domocretaivo1/");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -113,7 +114,7 @@ if (!defined("BASE_URL")) {
 </div>
 
 <footer class="text-center mt-5 py-4 text-muted small">
-    © <?= date("Y") ?> Domo Creativo — Gestión de pedidos.
+     <?= date("Y") ?> Domo Creativo — Gestión de pedidos.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

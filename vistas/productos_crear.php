@@ -18,12 +18,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["accion"]) && $_POST["
 
     if (!empty($nombre) && !empty($descripcion) && $precio > 0) {
         if ($controller->insertar($nombre, $descripcion, $precio)) {
-            $mensaje = "<div class='alert alert-success text-center'>✅ Producto creado correctamente.</div>";
+            $mensaje = "<div class='alert alert-success text-center'> Producto creado correctamente.</div>";
         } else {
-            $mensaje = "<div class='alert alert-danger text-center'>❌ Error al crear el producto.</div>";
+            $mensaje = "<div class='alert alert-danger text-center'> Error al crear el producto.</div>";
         }
     } else {
-        $mensaje = "<div class='alert alert-warning text-center'>⚠️ Todos los campos son obligatorios y el precio debe ser mayor a 0.</div>";
+        $mensaje = "<div class='alert alert-warning text-center'> Todos los campos son obligatorios y el precio debe ser mayor a 0.</div>";
     }
 }
 ?>
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["accion"]) && $_POST["
 <body class="bg-light">
 
 <div class="container mt-5 pt-4">
-    <h3 class="text-danger mb-4">Nuevo Producto</h3>
+    <h3 class="text-danger mb-4">Crear Producto</h3>
 
     <div class="card shadow-sm">
         <div class="card-body">
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["accion"]) && $_POST["
 </div>
 
 <footer class="text-center text-muted small py-4">
-    © <?= date("Y") ?> Domo Creativo — Gestión de productos.
+     <?= date("Y") ?> Domo Creativo — Gestión de productos.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

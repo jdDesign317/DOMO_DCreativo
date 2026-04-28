@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    alert("Carrito guardado correctamente ✅");
+                    alert("Carrito guardado correctamente ");
                     location.reload();
                 } else {
-                    alert("Error al guardar ❌");
+                    alert("Error al guardar ");
                 }
             })
             .catch(err => console.error("Error AJAX:", err));

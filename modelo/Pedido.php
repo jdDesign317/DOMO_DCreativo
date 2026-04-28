@@ -1,35 +1,37 @@
 <?php
 
+require_once "Conexion.php";
+
 class Pedido {
     private $conexion;
 
     public function __construct() {
-        $this->conexion = new mysqli("localhost", "root", "", "domo_creativo");
-
-        if ($this->conexion->connect_error) {
-            throw new Exception("Error de conexión: " . $this->conexion->connect_error);
-        }
-
-        $this->conexion->set_charset("utf8mb4");
+        $db = new Conexion();
+        $this->conexion = $db->getConexion();
     }
 
-    public function listar(): array {
-        $sql = "SELECT 
-                    p.id_pedido,
-                    p.id_presupuesto,
-                    p.estado,
-                    p.fecha_pedido,
-                    p.fecha_entrega,
-                    u.nombre AS usuario,
-                    pr.total_estimado
-                FROM pedidos p
-                JOIN presupuestos pr ON p.id_presupuesto = pr.id_presupuesto
-                JOIN usuarios u ON pr.id_usuario = u.id_usuario
-                ORDER BY p.id_pedido DESC";
+ 
+public function listar(): array {
+    $sql = "SELECT 
+                pedidos.id_pedido,
+                pedidos.id_presupuesto,
+                pedidos.estado,
+                pedidos.fecha_pedido,
+                pedidos.fecha_entrega,
+                usuarios.nombre AS usuario,
+                presupuestos.total_estimado
+            FROM pedidos
+            JOIN presupuestos 
+                ON pedidos.id_presupuesto = presupuestos.id_presupuesto
+            JOIN usuarios 
+                ON presupuestos.id_usuario = usuarios.id_usuario
+            ORDER BY pedidos.id_pedido DESC";
 
-        $res = $this->conexion->query($sql);
-        return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-    }
+    $resultado = $this->conexion->query($sql);
+
+    return $resultado ? $resultado->fetch_all(MYSQLI_ASSOC) : [];
+}
+
 
     public function insertar(int $id_presupuesto, string $estado, string $fecha_entrega): bool {
         $sql = "INSERT INTO pedidos (id_presupuesto, estado, fecha_entrega, fecha_pedido)

@@ -1,33 +1,38 @@
 <?php
 session_start();
+
+
+/* CONTROL DE SESIÓN */
 if (!isset($_SESSION["usuario"])) {
     header("Location: ../index.php");
     exit;
 }
 
-error_reporting(E_ALL);
-ini_set("display_errors", "On");
-
+/* CONTROLADORES */
 require_once "../controladores/ProductosControlador.php";
 require_once "../controladores/CarritoControlador.php";
 
+
+/* INSTANCIAS */
 $productosController = new ProductosControlador();
 $carritoController   = new CarritoControlador();
 
-/*
+/* 
    AGREGAR PRODUCTO AL CARRITO
- */
-if (isset($_POST["accion"]) && $_POST["accion"] === "agregar") {
+*/
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["accion"]) && $_POST["accion"] === "agregar") {
     $id_producto = intval($_POST["id_producto"]);
     $cantidad    = intval($_POST["cantidad"]);
+
     $carritoController->agregar($id_producto, $cantidad);
 }
 
 /* 
    LISTAR PRODUCTOS
- */
+*/
 $productos = $productosController->listar();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,27 +43,31 @@ $productos = $productosController->listar();
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Íconos -->
+    <!-- ÍCONOS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- Estilos -->
+    <!-- ESTILOS -->
     <link rel="stylesheet" href="../assets/css/productos.css">
 </head>
+
 <body class="light-theme">
 
-<!-- NAVBAR (EL QUE PEDISTE) -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg fixed-top navbar-light shadow-sm glass-navbar">
     <div class="container">
         <a class="navbar-brand text-danger fw-bold" href="../index.php">Domo Creativo</a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-end" id="menu">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="../index.php">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link active fw-semibold" href="usuarios.php">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="perfiles.php">Perfiles</a></li>
-                <li class="nav-item"><a class="nav-link" href="productos.php">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="perfiles.php">Perfiles</a></li>
+            <li class="nav-item"><a class="nav-link active fw-semibold" href="productos.php">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="pedidos.php">Pedidos</a></li>
                 <li class="nav-item"><a class="nav-link" href="presupuestos.php">Presupuestos</a></li>
                 <li class="nav-item"><a class="nav-link" href="carrito.php">Carrito</a></li>
                 <li class="nav-item">
@@ -76,8 +85,9 @@ $productos = $productosController->listar();
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="text-danger fw-bold mb-0">Listado de Productos</h4>
+
         <a href="productos_crear.php" class="btn btn-outline-danger">
-            <i class="bi bi-plus-circle me-1"></i> Nuevo Producto
+            <i class="bi bi-plus-circle me-1"></i> Producto Personalizado
         </a>
     </div>
 
@@ -88,21 +98,26 @@ $productos = $productosController->listar();
                 <div class="card-body d-flex flex-column">
 
                     <h5 class="card-title"><?= htmlspecialchars($p['nombre']) ?></h5>
-                    <p class="card-text"><?= htmlspecialchars($p['descripcion']) ?></p>
-                    <p class="fw-bold text-success mb-3">$<?= number_format($p['precio'], 2) ?></p>
 
+                    <p class="card-text">
+                        <?= htmlspecialchars($p['descripcion']) ?>
+                    </p>
+
+                    <p class="fw-bold text-success mb-3">
+                        $<?= number_format($p['precio'], 2) ?>
+                    </p>
+
+                    <!-- FORMULARIO AGREGAR -->
                     <form method="post" class="mt-auto">
                         <input type="hidden" name="accion" value="agregar">
                         <input type="hidden" name="id_producto" value="<?= $p['id_producto'] ?>">
 
                         <div class="input-group mb-2">
                             <input type="number" name="cantidad" min="1" value="1" class="form-control">
+
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-cart-plus"></i> Agregar
                             </button>
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
                         </div>
                     </form>
 
@@ -115,7 +130,7 @@ $productos = $productosController->listar();
 </div>
 
 <footer class="text-center mt-5 py-4 text-muted small">
-    © <?= date("Y") ?> Domo Creativo — Gestión de productos.
+    <?= date("Y") ?> Domo Creativo — Gestión de productos.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

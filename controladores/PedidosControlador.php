@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../modelo/Pedidos.php";
+require_once __DIR__ . "/../modelo/Pedido.php";
 
 if (!defined("BASE_URL")) {
     define("BASE_URL", "/plataforma_domo/");
@@ -52,7 +52,7 @@ class PedidosControlador {
             $pedido = $this->modelo->obtener($id);
 
             if ($pedido) {
-                require __DIR__ . "/../vistas/pedido_actualizar.php";
+                require __DIR__ . "/../vistas/pedidos_actualizar.php";
                 return;
             }
         }

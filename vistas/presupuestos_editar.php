@@ -6,7 +6,7 @@ if (!isset($_SESSION["usuario"])) {
 }
 
 require_once "../controladores/PresupuestosControlador.php";
-$presCtrl = new PresupuestosControlador();
+$presupuestoControlador = new PresupuestosControlador();
 
 if (!isset($_GET["id"])) {
     die("ID no especificado");

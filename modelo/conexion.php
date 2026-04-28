@@ -1,10 +1,12 @@
 <?php
+
 class Conexion {
-    private $host = "localhost";
-    private $usuario = "root";
-    private $password = "";
-    private $base_datos = "domo_creativo26";
-    private $conexion;
+    private string $host = "localhost";
+    private string $usuario = "root";
+    private string $password = "";
+    private string $base_datos = "domo_creativo26";
+
+    private mysqli $conexion;
 
     public function __construct() {
         $this->conexion = new mysqli(
@@ -14,15 +16,19 @@ class Conexion {
             $this->base_datos
         );
 
+        // Verificar conexión
         if ($this->conexion->connect_error) {
-            die("Error de conexión: " . $this->conexion->connect_error);
+            throw new Exception("Error de conexión: " . $this->conexion->connect_error);
         }
 
-        $this->conexion->set_charset("utf8mb4"); 
+        // Configurar charset
+        $this->conexion->set_charset("utf8mb4");
     }
 
-    public function getConexion() {
+    /**
+     * Retorna la conexión activa a la base de datos
+     */
+    public function getConexion(): mysqli {
         return $this->conexion;
     }
 }
-?>

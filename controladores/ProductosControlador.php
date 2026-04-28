@@ -1,14 +1,18 @@
 <?php
+// Aseguramos que la ruta sea exacta
+require_once __DIR__ . "/../modelo/conexion.php";
 require_once __DIR__ . "/../modelo/Productos.php";
 
-
-
 class ProductosControlador {
-    private $modelo;
+    // CORRECCIÓN: Agregamos 'Producto' antes de '$modelo' para quitar la marca naranja
+    private Producto $modelo; 
 
     public function __construct() {
-        // Nombre correcto de la clase del modelo
-        $this->modelo = new Producto();
+        $conexionObj = new Conexion();
+        $conexion = $conexionObj->getConexion();
+
+        // Ahora el editor entiende perfectamente esta asignación
+        $this->modelo = new Producto($conexion);
     }
 
     public function listar(): array {

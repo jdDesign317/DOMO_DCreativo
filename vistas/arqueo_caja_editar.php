@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["accion"]) && $_POST["
 
 <!-- FOOTER -->
 <footer class="text-center mt-5 py-4 text-muted small">
-    © <?= date("Y") ?> Domo Creativo — Gestión de arqueo de caja.
+     <?= date("Y") ?> Domo Creativo — Gestión de arqueo de caja.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
