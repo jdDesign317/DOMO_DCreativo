@@ -1,7 +1,7 @@
 <?php
 // Aseguramos que la ruta sea exacta
 require_once __DIR__ . "/../modelo/conexion.php";
-require_once __DIR__ . "/../modelo/Productos.php";
+require_once __DIR__ . "/../modelo/Producto.php";
 
 class ProductosControlador {
     // CORRECCIÓN: Agregamos 'Producto' antes de '$modelo' para quitar la marca naranja

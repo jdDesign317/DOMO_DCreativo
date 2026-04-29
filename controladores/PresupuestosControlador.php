@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../modelo/Presupuestos.php";
+require_once __DIR__ . "/../modelo/Presupuesto.php";
 
 class PresupuestosControlador {
 
