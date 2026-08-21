@@ -9,7 +9,8 @@ $_SESSION = [];
 session_destroy();
 
 // REDIRECCIONAR AL LOGIN
-header("Location: /DOMOCreativo/vistas/auth/login.php");
+
+header("Location: login.php");
 exit;
 
 ?>

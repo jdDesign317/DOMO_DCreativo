@@ -5,7 +5,7 @@ session_start();
 // VALIDAR SESION
 if (!isset($_SESSION["id_usuario"])) {
 
-    header("Location: ../auth/login.php");
+header("Location: vistas/auth/login.php");
     exit;
 }
 
@@ -23,5 +23,5 @@ if ($id_usuario > 0) {
 }
 
 // REDIRECCION
-header("Location: usuarios.php");
+header("Location: index.php?accion=usuarios");
 exit;

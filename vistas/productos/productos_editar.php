@@ -3,7 +3,7 @@
 // VALIDAR SESION
 if (!isset($_SESSION["id_usuario"])) {
 
-    header("Location: ../auth/login.php");
+   header("Location: vistas/auth/login.php");
     exit;
 }
 
@@ -80,6 +80,8 @@ if ($_POST) {
     <?= $mensaje ?>
 
     <form method="POST">
+
+        <input type="hidden" name="id_producto" value="<?= $producto['id_producto'] ?>">
 
         <!-- NOMBRE -->
         <div class="mb-2">

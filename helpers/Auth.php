@@ -10,10 +10,9 @@ class Auth {
         }
 
         // SI NO EXISTE SESIÓN
-        if (!isset($_SESSION["usuario"])) {
-
-           
-            header("Location: /DOMOCreativo/vistas/auth/login.php");
+        if (!isset($_SESSION["id_usuario"])) {
+             
+            header("Location: vistas/auth/login.php");
             exit;
         }
     }
@@ -25,7 +24,7 @@ class Auth {
             session_start();
         }
 
-        return $_SESSION["usuario"] ?? null;
+        return $_SESSION["id_usuario"] ?? null;
     }
 
     // VALIDAR PERFIL
@@ -36,16 +35,16 @@ class Auth {
         }
 
         // SI NO HAY SESIÓN
-        if (!isset($_SESSION["usuario"])) {
-
-            header("Location: ../auth/login.php");
+        if (!isset($_SESSION["id_usuario"])) {
+            
+            header("Location: vistas/auth/login.php");
             exit;
         }
 
         // SI EL PERFIL NO COINCIDE
-        if ($_SESSION["usuario"]["perfil"] !== $perfilPermitido) {
+        if ($_SESSION["perfil"] !== $perfilPermitido) {
 
-            header("Location: ../dashboard.php");
+            header("Location: index.php");
             exit;
         }
     }
@@ -60,7 +59,7 @@ class Auth {
         session_unset();
         session_destroy();
 
-        header("Location: ../auth/login.php");
+        header("Location: vistas/auth/login.php");
         exit;
     }
 }

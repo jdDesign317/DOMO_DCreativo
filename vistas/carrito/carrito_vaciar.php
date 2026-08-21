@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+// NOTA: session_start() lo hace index.php antes de incluir este archivo
 
 require_once __DIR__ . "/../../config/Conexion.php";
 
@@ -9,7 +9,7 @@ $db = (new Conexion())->getConexion();
 // VALIDAR SESIÓN
 if (!isset($_SESSION["id_usuario"])) {
 
-    header("Location: ../auth/login.php");
+    header("Location: /DOMOCreativo/vistas/auth/login.php");
     exit;
 }
 
@@ -35,7 +35,5 @@ if ($carrito) {
 }
 
 // REDIRECCIÓN
-header("Location: index.php?accion=carrito_ver");
+header("Location: /DOMOCreativo/index.php?accion=carrito");
 exit;
-
-?>

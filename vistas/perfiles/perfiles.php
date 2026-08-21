@@ -2,13 +2,13 @@
 
 // VALIDAR SESION
 if (!isset($_SESSION["id_usuario"])) {
-    header("Location: ../auth/login.php");
+    header("Location: vistas/auth/login.php");
     exit;
 }
 
 // SOLO ADMINISTRADOR
 if ($_SESSION["id_perfil"] != 2) {
-    header("Location: ../../index.php");
+    header("Location: index.php");
     exit;
 }
 

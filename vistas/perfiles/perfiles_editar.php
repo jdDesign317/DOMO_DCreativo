@@ -3,7 +3,7 @@ session_start();
 
 // VALIDAR SESION
 if (!isset($_SESSION["id_usuario"])) {
-    header("Location: ../auth/login.php");
+   header("Location: vistas/auth/login.php");
     exit;
 }
 
@@ -21,7 +21,7 @@ $mensaje = "";
 
 // VALIDAR ID
 if (!isset($_GET["id"])) {
-    header("Location: perfiles.php");
+    header("Location: index.php?accion=perfiles");
     exit;
 }
 
@@ -30,7 +30,7 @@ $id_perfil = (int) $_GET["id"];
 $perfil = $perfilesControlador->obtener($id_perfil);
 
 if (!$perfil) {
-    header("Location: perfiles.php");
+    header("Location: index.php?accion=perfiles");
     exit;
 }
 

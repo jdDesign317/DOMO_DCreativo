@@ -16,19 +16,14 @@ class UsuariosControlador {
     }
 
     // CREAR USUARIO
-    public function crear($nombre, $apellidos, $telefono, $email, $password, $id_perfil) {
+    public function crear($nombre, $apellidos, $telefono, $email, $localidad, $password, $id_perfil) {
 
-        $nombre = strtolower(trim($nombre));
+        $nombre    = strtolower(trim($nombre));
         $apellidos = strtolower(trim($apellidos));
-        $email = strtolower(trim($email));
+        $email     = strtolower(trim($email));
+        $localidad = trim($localidad); // VARCHAR, no FK
 
-        // VALIDACIONES
-        if (
-            empty($nombre) ||
-            empty($email) ||
-            empty($password) ||
-            empty($id_perfil)
-        ) {
+        if (empty($nombre) || empty($email) || empty($password) || empty($id_perfil)) {
             return false;
         }
 
@@ -51,6 +46,7 @@ class UsuariosControlador {
             $apellidos,
             $telefono,
             $email,
+            $localidad,
             $password_hash,
             $id_perfil
         );
@@ -65,7 +61,19 @@ class UsuariosControlador {
             return false;
         }
 
-        return $this->modelo->login($email, $password);
+        // BUSCAR USUARIO POR EMAIL
+        $usuario = $this->modelo->buscarPorEmail($email);
+
+        if (!$usuario) {
+            return false;
+        }
+
+        // VERIFICAR PASSWORD AQUI EN EL CONTROLADOR
+        if (!password_verify($password, $usuario["password_hash"])) {
+            return false;
+        }
+
+        return $usuario;
     }
 
     // BUSCAR POR EMAIL
@@ -84,19 +92,14 @@ class UsuariosControlador {
     }
 
     // ACTUALIZAR USUARIO
-    public function actualizar($id_usuario, $nombre, $apellidos, $telefono, $email, $password, $id_perfil) {
+    public function actualizar($id_usuario, $nombre, $apellidos, $telefono, $email, $localidad, $password, $id_perfil) {
 
-        $nombre = strtolower(trim($nombre));
+        $nombre    = strtolower(trim($nombre));
         $apellidos = strtolower(trim($apellidos));
-        $email = strtolower(trim($email));
+        $email     = strtolower(trim($email));
+        $localidad = trim($localidad); // VARCHAR, no FK
 
-        if (
-            empty($id_usuario) ||
-            empty($nombre) ||
-            empty($apellidos) ||
-            empty($email) ||
-            empty($id_perfil)
-        ) {
+        if (empty($id_usuario) || empty($nombre) || empty($apellidos) || empty($email) || empty($id_perfil)) {
             return false;
         }
 
@@ -104,19 +107,14 @@ class UsuariosControlador {
             return false;
         }
 
-        // PASSWORD
         if (empty($password)) {
-
-            
             $usuario = $this->modelo->buscarPorId($id_usuario);
-
-            if (!$usuario) {
+            if (!$usuario) return false;
+            $password_hash = $usuario["password_hash"];
+        } else {
+            if (strlen($password) < 6) {
                 return false;
             }
-
-            $password_hash = $usuario["password_hash"];
-
-        } else {
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
         }
 
@@ -126,12 +124,13 @@ class UsuariosControlador {
             $apellidos,
             $telefono,
             $email,
+            $localidad,
             $password_hash,
             $id_perfil
         );
     }
 
-    // ELIMINAR (BAJA LÓGICA)
+    // ELIMINAR (BAJA LOGICA)
     public function eliminar($id_usuario) {
 
         if (empty($id_usuario)) {
@@ -141,18 +140,13 @@ class UsuariosControlador {
         return $this->modelo->eliminar($id_usuario);
     }
 
-    // REACTIVAR USUARIO
-    public function reactivar() {
+    // REACTIVAR — recibe el id como parametro, sin tocar $_GET ni hacer redirect
+    public function reactivar($id_usuario) {
 
-        if (!isset($_GET["id"]) || empty($_GET["id"])) {
+        if (empty($id_usuario)) {
             return false;
         }
 
-        $id_usuario = $_GET["id"];
-
-        $this->modelo->reactivarUsuario($id_usuario);
-
-        header("Location: ../vistas/usuarios/usuarios_listar.php");
-        exit;
+        return $this->modelo->reactivarUsuario($id_usuario);
     }
 }

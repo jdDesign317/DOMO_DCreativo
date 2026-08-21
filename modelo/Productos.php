@@ -4,60 +4,90 @@ require_once __DIR__ . "/../config/Conexion.php";
 
 class Productos
 {
-    private $db;
+    private $conexion;
 
     public function __construct()
     {
-        $conexion = new Conexion();
-        $this->db = $conexion->getConexion();
+        $this->conexion = (new Conexion())->getConexion();
     }
 
-    // LISTAR
+    // LISTAR SOLO ACTIVOS (para el cliente)
     public function listar()
     {
-        $sql = "SELECT * FROM productos";
+        $sql = "SELECT * FROM productos WHERE activo = 1";
+        $resultado = $this->conexion->query($sql);
 
-        return $this->db->query($sql)->fetch_all(MYSQLI_ASSOC);
+        return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // LISTAR TODOS, ACTIVOS E INACTIVOS (para el panel admin)
+    public function listarTodas()
+    {
+        $sql = "SELECT * FROM productos";
+        $resultado = $this->conexion->query($sql);
+
+        return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
     // BUSCAR POR ID
     public function buscarPorId($id_producto)
     {
-        $sql = "SELECT * FROM productos
-                WHERE id_producto = $id_producto";
+        $sql = "SELECT * FROM productos WHERE id_producto = ?";
 
-        return $this->db->query($sql)->fetch_assoc();
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
     }
 
     // CREAR
     public function crear($nombre, $descripcion, $precio)
     {
-        $sql = "INSERT INTO productos
-                (nombre, descripcion, precio)
-                VALUES
-                ('$nombre', '$descripcion', '$precio')";
+        $sql = "INSERT INTO productos (nombre, descripcion, precio)
+                VALUES (?, ?, ?)";
 
-        return $this->db->query($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("ssd", $nombre, $descripcion, $precio);
+        $stmt->execute();
+
+        return $this->conexion->insert_id;
     }
 
     // ACTUALIZAR
     public function actualizar($id_producto, $nombre, $descripcion, $precio)
     {
         $sql = "UPDATE productos SET
-                    nombre = '$nombre',
-                    descripcion = '$descripcion',
-                    precio = '$precio'
-                WHERE id_producto = $id_producto";
+                    nombre = ?,
+                    descripcion = ?,
+                    precio = ?
+                WHERE id_producto = ?";
 
-        return $this->db->query($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("ssdi", $nombre, $descripcion, $precio, $id_producto);
+
+        return $stmt->execute();
     }
 
-    // ELIMINAR
-    public function eliminar($id_producto)
+    // BAJA LOGICA (antes era DELETE físico)
+    public function desactivar($id_producto)
     {
-        $sql = "DELETE FROM productos
-                WHERE id_producto = $id_producto";
+        $sql = "UPDATE productos SET activo = 0 WHERE id_producto = ?";
 
-        return $this->db->query($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+
+        return $stmt->execute();
+    }
+
+    // REACTIVAR
+    public function reactivar($id_producto)
+    {
+        $sql = "UPDATE productos SET activo = 1 WHERE id_producto = ?";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $id_producto);
+
+        return $stmt->execute();
     }
 }

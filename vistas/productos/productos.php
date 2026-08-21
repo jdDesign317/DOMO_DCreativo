@@ -19,6 +19,7 @@
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Precio</th>
+        <th>Estado</th>
         <th>Acciones</th>
     </tr>
 
@@ -35,6 +36,14 @@
             <td>$ <?= $p["precio"] ?></td>
 
             <td>
+                <?php if ($p["activo"] == 1): ?>
+                    <span class="badge bg-success">Activo</span>
+                <?php else: ?>
+                    <span class="badge bg-secondary">Inactivo</span>
+                <?php endif; ?>
+            </td>
+
+            <td>
 
                 <a href="index.php?accion=productos_ver&id=<?= $p["id_producto"] ?>"
                    class="btn btn-info btn-sm">
@@ -46,17 +55,23 @@
                     Editar
                 </a>
 
-                <a href="index.php?accion=productos_eliminar&id=<?= $p["id_producto"] ?>"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('¿Eliminar producto?')">
-                    Eliminar
-                </a>
+                <?php if ($p["activo"] == 1): ?>
 
-                <!-- BOTÓN CARRITO -->
-               <a href="index.php?accion=carrito_agregar&id=<?= $p["id_producto"] ?>"
-                class="btn btn-carrito btn-sm">
-                    <span class="icono-carrito">🛒</span>
-                </a>
+                    <a href="index.php?accion=productos_eliminar&id=<?= $p["id_producto"] ?>"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Dar de baja este producto?')">
+                        Eliminar
+                    </a>
+
+                <?php else: ?>
+
+                    <a href="index.php?accion=productos_reactivar&id=<?= $p["id_producto"] ?>"
+                       class="btn btn-success btn-sm"
+                       onclick="return confirm('¿Reactivar este producto?')">
+                        Reactivar
+                    </a>
+
+                <?php endif; ?>
 
             </td>
 

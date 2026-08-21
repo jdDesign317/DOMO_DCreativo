@@ -13,7 +13,6 @@ $mensaje = "";
 
 /* SI YA HAY SESIÓN */
 if (isset($_SESSION["id_usuario"])) {
-
     header("Location: ../../index.php");
     exit;
 }
@@ -25,15 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $apellidos = trim($_POST["apellidos"]);
     $telefono  = trim($_POST["telefono"]);
     $email     = trim($_POST["email"]);
+    $localidad = trim($_POST["localidad"]);
     $password  = trim($_POST["password"]);
 
     $id_perfil = 1; // cliente
 
-    if (
-        empty($nombre) ||
-        empty($email) ||
-        empty($password)
-    ) {
+    if (empty($nombre) || empty($email) || empty($password)) {
 
         $mensaje = "<div class='alert alert-warning mt-3 text-center'>
                         Completa los campos obligatorios.
@@ -58,56 +54,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $apellidos,
             $telefono,
             $email,
+            $localidad,
             $password,
             $id_perfil
         );
-if ($resultado) {
 
-    header("Location: login.php?registro=ok");
-    exit;
-
-} else {
-
-    $mensaje = "<div class='alert alert-danger mt-3 text-center'>
-                    Error al registrar o email ya existe.
-                </div>";
-}
+        if ($resultado) {
+            header("Location: login.php?registro=ok");
+            exit;
+        } else {
+            $mensaje = "<div class='alert alert-danger mt-3 text-center'>
+                            El correo electrónico ingresado ya se encuentra registrado.
+                        </div>";
+        }
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
     <title>Registro | DOMOCreativo</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <!-- ESTILOS DOMO -->
     <link rel="stylesheet" href="../../assets/css/estilos.css">
-
 </head>
 
 <body class="d-flex justify-content-center align-items-center min-vh-100">
 
 <div class="login-card">
 
-    <h3 class="text-center fw-bold text-domocreativo mb-3">
-        Registro
-    </h3>
-
-    <p class="text-center text-muted mb-4">
-        Crear cuenta en DOMOCreativo
-    </p>
+    <h3 class="text-center fw-bold text-domocreativo mb-3">Registro</h3>
+    <p class="text-center text-muted mb-4">Crear cuenta en DOMOCreativo</p>
 
     <?= $mensaje ?>
 
@@ -125,22 +105,22 @@ if ($resultado) {
         <!-- EMAIL -->
         <input type="email" name="email" class="form-control mb-3" placeholder="Email">
 
+        <!-- LOCALIDAD -->
+        <input type="text" name="localidad" class="form-control mb-3" placeholder="Localidad">
+
         <!-- PASSWORD CON MOSTRAR/OCULTAR -->
         <div class="input-group mb-3">
-
-            <input 
-                type="password" 
-                name="password" 
+            <input
+                type="password"
+                name="password"
                 id="password"
-                class="form-control" 
+                class="form-control"
                 placeholder="Contraseña"
                 required
             >
-
             <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                 👁
             </button>
-
         </div>
 
         <!-- BOTON -->
@@ -151,27 +131,22 @@ if ($resultado) {
     </form>
 
     <div class="text-center mt-3">
-        
-       <a href="login.php" class="text-decoration-none text-domocreativo">
+        <a href="login.php" class="text-decoration-none text-domocreativo">
             ¿Ya tenés cuenta? Iniciar sesión
-       </a>
-
+        </a>
     </div>
 
 </div>
 
-<!-- JS  MOSTRAR/OCULTAR PASSWORD -->
+<!-- JS MOSTRAR/OCULTAR PASSWORD -->
 <script>
 document.getElementById("togglePassword").addEventListener("click", function () {
-
     const input = document.getElementById("password");
-
     if (input.type === "password") {
         input.type = "text";
     } else {
         input.type = "password";
     }
-
 });
 </script>
 
